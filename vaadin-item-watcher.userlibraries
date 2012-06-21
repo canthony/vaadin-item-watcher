@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eclipse-userlibraries>
+  <library name="jruby-1.6.7-p357 facet library">
+    <archive path="C:/Java/jruby-1.6.7/lib/ruby/site_ruby/1.8" />
+    <archive path="C:/Java/jruby-1.6.7/lib/ruby/site_ruby/shared" />
+    <archive path="C:/Java/jruby-1.6.7/lib/ruby/1.8" />
+    <archive path="C:/Users/Charles/.IntelliJIdea11/config/plugins/ruby/rubystubs/rubystubs18" />
+  </library>
+  <library name="rake (v0.8.7, jruby-1.6.7-p357) [gem]">
+    <archive path="C:/Java/jruby-1.6.7/lib/ruby/gems/1.8/gems/rake-0.8.7/bin" />
+    <archive path="C:/Java/jruby-1.6.7/lib/ruby/gems/1.8/gems/rake-0.8.7/lib" />
+  </library>
+  <library name="sources (v0.0.1, jruby-1.6.7-p357) [gem]">
+    <archive path="C:/Java/jruby-1.6.7/lib/ruby/gems/1.8/gems/sources-0.0.1/lib" />
+  </library>
+</eclipse-userlibraries>
+
