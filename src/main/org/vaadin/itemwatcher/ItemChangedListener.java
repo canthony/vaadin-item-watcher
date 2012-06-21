@@ -16,6 +16,8 @@
 
 package org.vaadin.itemwatcher;
 
-public interface ItemChangedListener {
+import java.io.Serializable;
+
+public interface ItemChangedListener extends Serializable {
   public void itemChanged(ItemChangedEvent event);
 }

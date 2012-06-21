@@ -16,12 +16,14 @@
 
 package org.vaadin.itemwatcher;
 
+import com.vaadin.data.Property;
+import com.vaadin.data.util.ObjectProperty;
+import com.vaadin.data.util.PropertysetItem;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class WatcherTest {
@@ -86,6 +88,57 @@ public class WatcherTest {
     watcher.notifyItemChanged(event);
     verify(listener1, times(1)).itemChanged(event);
     verify(listener2, times(2)).itemChanged(event);
+  }
+
+  @Test
+  public void testWatch() {
+    ObjectProperty<String> p1 = new ObjectProperty<String>("A1");
+    PropertysetItem item = new PropertysetItem();
+    item.addItemProperty("p1", p1);
+    ItemChangedListener listener1 = mock(ItemChangedListener.class);
+    ItemChangedListener listener2 = mock(ItemChangedListener.class);
+    watcher.addListener(listener1);
+    watcher.addListener(listener2);
+
+    assertTrue(watcher.itemWatchers.isEmpty());
+    assertTrue(p1.getListeners(Property.ValueChangeEvent.class).isEmpty());
+    watcher.watch(item);
+    assertEquals(1, watcher.itemWatchers.size());
+    assertEquals(1, p1.getListeners(Property.ValueChangeEvent.class).size());
+
+    p1.setValue("A2");
+    ArgumentCaptor<ItemChangedEvent> captor = ArgumentCaptor.forClass(ItemChangedEvent.class);
+    verify(listener1, times(1)).itemChanged(captor.capture());
+    assertSame(item, captor.getValue().getItem());
+    assertSame(p1, captor.getValue().getProperty());
+    assertEquals("A2", captor.getValue().getProperty().getValue());
+
+    verify(listener2, times(1)).itemChanged(captor.capture());
+    assertSame(item, captor.getValue().getItem());
+    assertSame(p1, captor.getValue().getProperty());
+    assertEquals("A2", captor.getValue().getProperty().getValue());
+
+    Watcher.ItemWatcher iw = watcher.itemWatchers.get(item);
+    iw.unwatch("p1");
+    p1.setValue("A3");
+    verify(listener1, times(1)).itemChanged(captor.capture());
+  }
+
+  @Test
+  public void testUnwatch() {
+    ObjectProperty<String> p1 = new ObjectProperty<String>("A1");
+
+    PropertysetItem item = new PropertysetItem();
+    item.addItemProperty("p1", p1);
+
+    assertTrue(watcher.itemWatchers.isEmpty());
+    watcher.watch(item);
+    assertEquals(1, watcher.itemWatchers.size());
+
+    watcher.unwatch(item);
+    assertEquals(0, watcher.itemWatchers.size());
+    assertEquals(0, p1.getListeners(Property.ValueChangeEvent.class).size());
+
   }
 
 }
